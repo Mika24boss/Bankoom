@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class LightToggle : MonoBehaviour
@@ -22,21 +23,35 @@ public class LightToggle : MonoBehaviour
     /// </summary>
     [SerializeField] private float distanceForClick;
 
-    private void OnMouseDown()
-    {
-        if (!((GameData.player.transform.position - transform.position).sqrMagnitude <= distanceForClick)) return; //joueur est trop loin
+    private Ray ray;
+    private RaycastHit r = new RaycastHit();
+    private Collider objectCollider;
 
-        if (mrOn.material.IsKeywordEnabled("_EMISSION")) //ON est on
+    private void Start()
+    {
+        objectCollider = GetComponent<Collider>();
+    }
+
+    private void Update()
+    {
+        
+        ray = GameData.mainCamera.ViewportPointToRay(GameData.cameraRayVector);
+        if (objectCollider.Raycast(ray, out r, distanceForClick) && Input.GetMouseButtonDown(0))
         {
-            mrOn.material.DisableKeyword("_EMISSION");
-            mrOff.material.EnableKeyword("_EMISSION");
-            GameData.CameraActiveDictionary[cameraName.ToString()] = false;
-        }
-        else //OFF est on
-        {
-            mrOn.material.EnableKeyword("_EMISSION");
-            mrOff.material.DisableKeyword("_EMISSION");
-            GameData.CameraActiveDictionary[cameraName.ToString()] = true;
+            if (mrOn.material.IsKeywordEnabled("_EMISSION")) //ON est on
+            {
+                mrOn.material.DisableKeyword("_EMISSION");
+                mrOff.material.EnableKeyword("_EMISSION");
+                GameData.CameraActiveDictionary[cameraName.ToString()] = false;
+            }
+            else //OFF est on
+            {
+                mrOn.material.EnableKeyword("_EMISSION");
+                mrOff.material.DisableKeyword("_EMISSION");
+                GameData.CameraActiveDictionary[cameraName.ToString()] = true;
+            }
+
+
         }
     }
 }

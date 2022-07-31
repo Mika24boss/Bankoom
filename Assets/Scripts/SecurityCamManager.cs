@@ -76,7 +76,7 @@ public class SecurityCamManager : MonoBehaviour
     private void Update()
     {
         if (!GameData.viewSecurityCam) return;
-        if (Input.GetKey(KeyCode.Escape) && !playerMouseLook.isInAnim)
+        if (Input.GetKey(KeyCode.Tab) && !playerMouseLook.isInAnim)
         {
             stopViewingSecurity();
             return;
@@ -100,7 +100,7 @@ public class SecurityCamManager : MonoBehaviour
     public void viewSecurity()
     {
         GameData.viewSecurityCam = true;
-        GameData.bottomText.text = "ESC pour revenir\nClic gauche et clic droit pour changer de caméra";
+        GameData.bottomText.text = "TAB pour revenir\nClic gauche et clic droit pour changer de caméra";
         securityCameraOverlay.SetActive(true);
         cameras[index].enabled = true;
         securityCams[index].viewSecurity();

@@ -6,7 +6,11 @@ using UnityEngine.Events;
 public class KeypadButtonScript : MonoBehaviour
 {
     public ButtonEvent buttonEvent;
-  
+
+
+    private void Update()
+    {
+    }
 
     private void OnMouseDown()
     {

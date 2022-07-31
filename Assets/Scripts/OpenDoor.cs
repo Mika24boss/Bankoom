@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -28,69 +29,84 @@ public class OpenDoor : MonoBehaviour
     /// </summary>
     private AudioSource audioSource;
 
+    private Ray ray;
+    private RaycastHit r = new RaycastHit();
+    private Collider objectCollider;
+
     private void Start()
     {
         doorAnimator = GetComponent<Animator>();
         playerAnimator = GameData.player.GetComponent<Animator>();
         playerDetection = transform.GetComponentInChildren<PlayerDetection>();
         audioSource = GetComponent<AudioSource>();
+        objectCollider = GetComponent<Collider>();
     }
 
-    private void OnMouseDown()
+    private void Update()
     {
-        if (isOpen || playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("OpeningLock") ||
-            playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("Opening")) return;
+        ray = GameData.mainCamera.ViewportPointToRay(GameData.cameraRayVector);
 
-        if (!playerDetection.isPlayerClose) return;
 
-        if (CompareTag("SecurityDoor1"))
+        if (objectCollider.Raycast(ray, out r, 4) && Input.GetMouseButtonDown(0))
         {
-            GameData.doorNumber = 1;
+              if (isOpen || playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("OpeningLock") ||
+                        playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("Opening")) return;
+            
+                    if (!playerDetection.isPlayerClose) return;
+            
+                    if (CompareTag("SecurityDoor1"))
+                    {
+                        GameData.doorNumber = 1;
+            
+                        if (GameData.KeyDictionary["hasKey1"])
+                        {
+                            opening();
+                        }
+                        else
+                        {
+                            StartCoroutine(WaitExecution(2f, "Vous n'avez pas la clé!"));
+                            playerAnimator.SetTrigger("DoorLock");
+                        }
+                    }
+                    else if (CompareTag("SecurityDoor2"))
+                    {
+                        GameData.doorNumber = 2;
+                        opening();
+                    }
+                    else if (CompareTag("JanitorDoor"))
+                    {
+                        if (!GameData.isPlayerDetected)
+                        {
+                            GameData.doorNumber = 3;
+                            opening();
+                        }
+                        else
+                        {
+                            StartCoroutine(WaitExecution(3f,
+                                "Une caméra de sécurité vous a repéré! Il faut découvrir comment la tourner."));
+                        }
+                    }
+                    else if (CompareTag("TutorialDoor"))
+                    {
+                        GameData.doorNumber = 4;
+            
+                        if (GameData.KeyDictionary["hasKeyTut"])
+                        {
+                            GameData.currentObjectiveIndex = 1;
+                            opening();
+                        }
+                        else
+                        {
+                            StartCoroutine(WaitExecution(2f, "Vous n'avez pas la clé!"));
+                            playerAnimator.SetTrigger("DoorLock");
+                        }
+                    }
+            
+            
+        }
+}
 
-            if (GameData.KeyDictionary["hasKey1"])
-            {
-                opening();
-            }
-            else
-            {
-                StartCoroutine(WaitExecution(2f, "Vous n'avez pas la clé!"));
-                playerAnimator.SetTrigger("DoorLock");
-            }
-        }
-        else if (CompareTag("SecurityDoor2"))
-        {
-            GameData.doorNumber = 2;
-            opening();
-        }
-        else if (CompareTag("JanitorDoor"))
-        {
-            if (!GameData.isPlayerDetected)
-            {
-                GameData.doorNumber = 3;
-                opening();
-            }
-            else
-            {
-                StartCoroutine(WaitExecution(3f,
-                    "Une caméra de sécurité vous a repéré! Il faut découvrir comment la tourner."));
-            }
-        }
-        else if (CompareTag("TutorialDoor"))
-        {
-            GameData.doorNumber = 4;
 
-            if (GameData.KeyDictionary["hasKeyTut"])
-            {
-                GameData.currentObjectiveIndex = 1;
-                opening();
-            }
-            else
-            {
-                StartCoroutine(WaitExecution(2f, "Vous n'avez pas la clé!"));
-                playerAnimator.SetTrigger("DoorLock");
-            }
-        }
-    }
 
     /// <summary>
     /// Afficher un message à l'écran pour une durée de temps

@@ -2,6 +2,7 @@ using System.Collections;
 using Scenes;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.PlayerLoop;
 
 
 [RequireComponent(typeof(BtnUIScript))]
@@ -10,7 +11,6 @@ public class KeypadHandler : MonoBehaviour
     [Tooltip("Le code a 4 chiffre pour ouvrir le cadena")]
     public string code;
 
-    
 
     public float distanceForClick = 2f;
 
@@ -23,35 +23,36 @@ public class KeypadHandler : MonoBehaviour
     private GameObject _player;
     private AudioSource _audioSource;
 
-    
+
     private BtnUIScript _btnQuit;
     private KeypadLightManager _lightManager;
 
     private LockOnCameraManager _cameraManager;
 
-    
 
     private bool _alreadyUnlocked;
-    
+
 
     private string _codeInput = "";
 
     private LightUp _lightUp;
     private BoxCollider _boxCollider;
+    private Ray ray;
+    private RaycastHit r = new RaycastHit();
+    private Collider objectCollider;
 
     private void Start()
     {
-       
-
+        objectCollider = GetComponent<Collider>();
         _player = GameObject.FindWithTag("Player");
-    
+
 
         if (_player.Equals(null))
         {
             throw new MissingObjectException("couldn't find gameObject with tag Player");
         }
 
-     
+
         _btnQuit = GetComponent<BtnUIScript>();
         _lightManager = GetComponentInChildren<KeypadLightManager>();
         _cameraManager = GetComponentInChildren<LockOnCameraManager>();
@@ -60,33 +61,32 @@ public class KeypadHandler : MonoBehaviour
         _audioSource = GetComponent<AudioSource>();
     }
 
-    private void OnMouseDown()
-    {
-        if (_alreadyUnlocked || GameData.isUsingKeyPad) return;
-        if (!((GameData.player.transform.position - transform.position).sqrMagnitude <= distanceForClick)) return;
-        SwitchViewMode();
-    }
 
     private void Update()
     {
+        ray = GameData.mainCamera.ViewportPointToRay(GameData.cameraRayVector);
+        if (objectCollider.Raycast(ray, out r, distanceForClick) && Input.GetMouseButtonDown(0))
+        {
+            if (_alreadyUnlocked || GameData.isUsingKeyPad) return;
+
+            SwitchViewMode();
+        }
+
         if (_alreadyUnlocked || GameData.isUsingKeyPad)
         {
             _lightUp.enabled = false;
             _lightUp.meshRenderer.material.DisableKeyword("_EMISSION");
         }
         else _lightUp.enabled = true;
-
-       
     }
 
     private void SwitchViewMode()
     {
-        
         _boxCollider.enabled = !_boxCollider.enabled;
         _cameraManager.SwitchCam();
         GameData.isUsingKeyPad = !GameData.isUsingKeyPad;
         _btnQuit.enabled = !_btnQuit.enabled;
-       
+
 
         _audioSource.clip = _audioSource.clip.Equals(_keypadEnter) ? _keypadExit : _keypadEnter;
         _audioSource.Play();
@@ -94,8 +94,6 @@ public class KeypadHandler : MonoBehaviour
 
     public void NewInput(int nb)
     {
-
-
         if (nb == -1) //enter
         {
             if (_codeInput.Equals(code))
@@ -132,7 +130,6 @@ public class KeypadHandler : MonoBehaviour
                 StartCoroutine(WaitExecution(2.5f));
             }
         }
-
     }
 
     public void UIBtnAction()

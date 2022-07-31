@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class SecSafeManager : MonoBehaviour
@@ -23,7 +24,20 @@ public class SecSafeManager : MonoBehaviour
     /// </summary>
     public void OpenLockAction()
     {
+        StartCoroutine(timerToOpen());
+       
         _animator.SetTrigger("Open");
         _audioSource.Play();
+    }
+
+
+
+
+    private IEnumerator timerToOpen()
+    {
+
+        yield return new WaitForSeconds(0.5f);
+         GameData.isSmallSafeOpen = true;
+        
     }
 }

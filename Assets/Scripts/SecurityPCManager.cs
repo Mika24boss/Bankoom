@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -13,23 +14,45 @@ public class SecurityPCManager : MonoBehaviour
     /// </summary>
     private MouseLook playerMouseLook;
 
+    private Ray ray;
+    private RaycastHit r = new RaycastHit();
+    private Collider objectCollider;
     private void Start()
     {
         playerMouseLook = GameData.player.GetComponentInChildren<MouseLook>();
+        objectCollider = GetComponent<Collider>();
+
+    }
+
+    private void Update()
+    {
+    
+        
+            ray =GameData.mainCamera.ViewportPointToRay(GameData.cameraRayVector);
+
+
+            if (objectCollider.Raycast(ray, out r, 3) && Input.GetMouseButtonDown(0))
+            {
+
+
+              
+                if (!GameData.KeyDictionary["hasKeycard"])
+                {
+                    StartCoroutine(WaitExecution(2.5f));
+                }
+                else
+                {
+                    playerMouseLook.startTransition();
+                    playerMouseLook.enabled = false;
+                }
+
+            }
+        
     }
 
     private void OnMouseDown()
     {
-        if (!((GameData.player.transform.position - transform.position).sqrMagnitude <= distanceForClick)) return;
-        if (!GameData.KeyDictionary["hasKeycard"])
-        {
-            StartCoroutine(WaitExecution(2.5f));
-        }
-        else
-        {
-            playerMouseLook.startTransition();
-            playerMouseLook.enabled = false;
-        }
+      
     }
 
     /// <summary>

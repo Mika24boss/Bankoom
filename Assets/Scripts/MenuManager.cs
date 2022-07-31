@@ -23,12 +23,12 @@ public class MenuManager : MonoBehaviour
         
         if (GameData.isMenuOpened)
         {
-            if (Input.GetKeyDown(KeyCode.Tab) || Input.GetKeyDown(KeyCode.Escape))
+            if (Input.GetKeyDown(KeyCode.P))
             {
                 CloseMenu();
             }
         }
-        else if (Input.GetKeyDown(KeyCode.Tab))
+        else if (Input.GetKeyDown(KeyCode.P))
         {
             OpenMenu();
         }

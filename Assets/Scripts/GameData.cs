@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.ComponentModel.Design.Serialization;
 using TMPro;
 using UnityEngine;
 
@@ -31,6 +32,8 @@ public static class GameData
     /// True = joueur regarde les caméras, false sinon
     /// </summary>
     public static bool viewSecurityCam;
+
+    public static Camera mainCamera = GameObject.Find("Camera").GetComponent<Camera>();
 
     /// <summary>
     /// True = joueur utilise keypad, false sinon
@@ -85,4 +88,8 @@ public static class GameData
     /// Référence au texte en bas de l'écran
     /// </summary>
     public static TMP_Text bottomText;
+
+    public static bool isSmallSafeOpen = false;
+
+    public static Vector3 cameraRayVector = new Vector3(0.5f, 0.5f, 0);
 }
