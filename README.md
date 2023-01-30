@@ -17,4 +17,4 @@ _____________________________________________________
 
 <h3> <a href="https://www.youtube.com/watch?v=CWyltCsJETU">Trailer!</a> </h3>
  
-![](https://adobeindd.com/view/publications/548a90c3-de38-4683-9527-292b20bab8b2/55k6/publication-web-resources/image/Capture_d%E2%80%99e%CC%81cran%2C_le_2021-06-02_a%CC%80_16.13.53.png)
+![](https://indd.adobe.com/view/publication/548a90c3-de38-4683-9527-292b20bab8b2/55k6/publication-web-resources/image/Capture_d%E2%80%99e%CC%81cran%2C_le_2021-06-02_a%CC%80_16.13.53.png)
