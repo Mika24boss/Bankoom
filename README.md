@@ -1,5 +1,5 @@
 # Bankoom
-Project d'intégration de CÉGEP en équipe de 4</br>
+Project d'intégration de CÉGEP en équipe de 2</br>
 Jeu d'évasion dans un environnement de banque utilisant un pack de ressources payant dans Unity
 
 <b>Essayez le jeu <a href="https://mika24boss.github.io/Bankoom/">ici</a>!</b>
@@ -7,7 +7,7 @@ Jeu d'évasion dans un environnement de banque utilisant un pack de ressources p
 Certains dossiers ont été omis pour des raisons de copyrights.
 _____________________________________________________
 
-CEGEP graduation project in teams of 4</br>
+CEGEP graduation project in teams of 2</br>
 Escape game in a bank setting using a paid asset pack in Unity
 
 <b>Play the game <a href="https://mika24boss.github.io/Bankoom/">here</a>!</b>
